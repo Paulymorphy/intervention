@@ -1,3 +1,5 @@
+var sender = require('./sender');
+
 exports.post = function(req, res, next){
     var body = req.body;
 
@@ -7,7 +9,10 @@ exports.post = function(req, res, next){
             // Get the webhook event. entry.messaging is an array, but 
             // will only ever contain one event, so we get index 0
             let webhook_event = entry.messaging[0];
-            console.log(webhook_event);
+            //console.log(webhook_event);
+            sender.reply(webhook_event.sender.id, "Testing Server Response", function(err){
+                if(err) return next(err);
+            });
         });
 
         // Return a '200 OK' response to all events
@@ -19,7 +24,7 @@ exports.post = function(req, res, next){
 };
 
 exports.get = function(req, res, next){
-    var VERIFY_TOKEN = "EAAGeibwtoEQBAHZCIg5vCgPDU8obHPtwcv7eysddoDz8v1vTUHV3dfhPtk5kSpCUW55PvL15xFbqAvbqEOmXkm9A9ZAJD9jaMAM2A5TTkAF48Vm8mGb8Rs9Jjc77PmAhJhf7SuoM7CH2tpFda3PDpr2ZC9sPKZB7yjtkUa9DjwZDZD";
+    var VERIFY_TOKEN = process.env.PAGE_ACCESS_TOKEN;
     
     // Parse params from the webhook verification request
     var mode = req.query['hub.mode'];
