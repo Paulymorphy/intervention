@@ -3,6 +3,7 @@ var main = require('../core/head');
 exports.post = function(req, res, next){
     let body = req.body;
     if (body.object === 'page') {
+        console.log('[WEBHOOK] Event Entry Receive!');
         let messages = [];
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function (entry, index) {
