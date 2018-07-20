@@ -17,6 +17,7 @@ exports.reply = function(pid, message, cb){
         url: url,
         method: "POST",
         body: messageObj,
+        json: true
     },function(err, res, body){
         if(err) return cb(err);
         cb(null);
@@ -31,7 +32,7 @@ exports.welcome = function(user){
 };
 
 exports.Response = function(pid){
-    var senderID = pdi;
+    var senderID = pid;
     var api = url;
     this.send = function(message){
         var messageObj = {
@@ -48,8 +49,9 @@ exports.Response = function(pid){
             method: "POST",
             body: messageObj,
         },function(err, res, body){
-            if(err) return cb(err);
-            cb(null);
+            if(err){
+              console.error(err);
+            }
         });
     };
 };
