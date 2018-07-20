@@ -1,20 +1,18 @@
-var sender = require('./sender');
+var main = require('../core/head');
 
 exports.post = function(req, res, next){
-    var body = req.body;
-
+    let body = req.body;
     if (body.object === 'page') {
+        let messages = [];
         // Iterate over each entry - there may be multiple if batched
-        body.entry.forEach(function (entry) {
+        body.entry.forEach(function (entry, index) {
             // Get the webhook event. entry.messaging is an array, but 
             // will only ever contain one event, so we get index 0
-            let webhook_event = entry.messaging[0];
-            //console.log(webhook_event);
-            sender.reply(webhook_event.sender.id, "Testing Server Response", function(err){
-                if(err) return next(err);
-            });
+            messages.push(entry.messaging[0]);
+            if(index == body.entry.length-1){
+                main(messages);
+            }
         });
-
         // Return a '200 OK' response to all events
         res.status(200).send('EVENT_RECEIVED');
     } else {
