@@ -49,9 +49,7 @@ exports.Response = function(pid){
             method: "POST",
             body: messageObj,
         },function(err, res, body){
-            if(err){
-              console.error(err);
-            }
+            if(err) return console.error(err);
         });
     };
 };

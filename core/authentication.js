@@ -9,8 +9,10 @@ let checkUser = function(pid){
             }else{
                 let stmt = db.prepare("INSERT INTO users (pid,sid) values(?,?)");
                 stmt.run(pid,"0");
-                stmt.finalize();
-                fulfill(null);
+                stmt.finalize(err=>{
+                    if(err) return reject(err);
+                    fulfill(null);
+                });
             }
         });
     });
@@ -19,11 +21,7 @@ let checkUser = function(pid){
 module.exports = function(pid){
     return new Promise(function(fulfill, reject){
         checkUser(pid).then(function(sid){
-            if(sid){
-                fulfill(sid);
-            }else{
-                fulfill(null);
-            }
+            fulfill(sid);
         }).catch(reject);
     });
 }
